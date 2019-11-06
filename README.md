@@ -50,3 +50,51 @@ Python 3:
 ```sh
 sudo pip3 install Adafruit_DHT
 ```
+
+# Client nodeJS Dependencies for Raspberry Pi
+The nodeJS client code makes use of the node-dht-sensor module.  You can find the code repository at https://github.com/momenso/node-dht-sensor.
+
+Installing
+----------
+
+### Dependencies
+
+For all platforms (Raspberry Pi and Beaglebone Black) make sure your system has nodeJS and npm installed. 
+
+On Raspbian or Beaglebone Black's Debian/Ubuntu image you can ensure your
+system is ready by following the steps:
+Find the ARM version of your pi: 
+````sh
+uname -a
+````
+
+Download the respective version of [nodeJS](https://nodejs.org/en/download/) and install:
+````sh
+wget <https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-armv7l.tar.gz>
+tar -xzf <node-v8.9.0-linux-armv6l.tar.gz>
+cd <node-v6.11.1-linux-armv6l>/
+sudo cp -R * /usr/local/
+````
+
+Verify the node and npm version using the following commands:
+````sh
+node -v
+npm -v
+````
+
+Install the sensor module:
+
+````sh
+npm install node-dht-sensor
+````
+
+Install git and Azure IoT module:
+
+````sh
+sudo apt-get install git
+npm install azure-iot-device
+npm install azure-iot-device-mqtt
+````
+
+
+
