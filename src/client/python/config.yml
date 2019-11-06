@@ -1,0 +1,8 @@
+iothub:
+    connectionstring: REPLACE_WITH_IOTHUB_CONNECTION_STRING
+other:
+    preprocessing_queue:
+        - preprocessing.scale_and_center
+        - preprocessing.dot_reduction
+        - preprocessing.connect_lines
+    use_anonymous: yes
