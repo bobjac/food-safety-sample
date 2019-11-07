@@ -41,7 +41,7 @@ else:
 humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
 # Un-comment the line below to convert the temperature to Fahrenheit.
-# temperature = temperature * 9/5.0 + 32
+temperature = temperature * 9/5.0 + 32
 
 # Note that sometimes you won't get a reading and
 # the results will be null (because Linux can't
