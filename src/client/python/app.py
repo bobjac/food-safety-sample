@@ -61,30 +61,56 @@ def send_temp_and_humidity(sensor, pin):
 
     try:
         client = iothub_client_init()
-        telemetry.send_telemetry_data(parse_iot_hub_name(), EVENT_SUCCESS, "IoT hub connection is established")
         
         if client.protocol == IoTHubTransportProvider.MQTT:
             print ( "IoTHubClient is reporting state" )
             reported_state = "{\"newState\":\"standBy\"}"
             client.send_reported_state(reported_state, len(reported_state), send_reported_state_callback, SEND_REPORTED_STATE_CONTEXT)
     
-        # Try to grab a sensor reading.  Use the read_retry method which will retry up
-        # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+        telemetry.send_telemetry_data(parse_iot_hub_name(), EVENT_SUCCESS, "IoT hub connection is established")
 
-        # Un-comment the line below to convert the temperature to Fahrenheit.
-        temperature = temperature * 9/5.0 + 32
+        while True:
+            global MESSAGE_COUNT,MESSAGE_SWITCH
+            if MESSAGE_SWITCH:
+                # Try to grab a sensor reading.  Use the read_retry method which will retry up
+                # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
+                humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
-        # Note that sometimes you won't get a reading and
-        # the results will be null (because Linux can't
-        # guarantee the timing of calls to read the sensor).
-        # If this happens try again!
-        if humidity is not None and temperature is not None:
-            print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
-        else:
-            print('Failed to get reading. Try again!')
-            sys.exit(1)
-    
+                # Un-comment the line below to convert the temperature to Fahrenheit.
+                temperature = temperature * 9/5.0 + 32
+
+                # Note that sometimes you won't get a reading and
+                # the results will be null (because Linux can't
+                # guarantee the timing of calls to read the sensor).
+                # If this happens try again!
+                if humidity is not None and temperature is not None:
+                    print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
+                else:
+                    print('Failed to get reading. Try again!')
+                    sys.exit(1)
+                
+                # send a few messages every minute
+                print ( "IoTHubClient sending %d messages" % MESSAGE_COUNT )
+
+                msg_txt_formatted = MSG_TXT % (
+                    temperature,
+                    humidity)
+                print (msg_txt_formatted)
+                message = IoTHubMessage(msg_txt_formatted)
+                # optional: assign ids
+                message.message_id = "message_%d" % MESSAGE_COUNT
+                message.correlation_id = "correlation_%d" % MESSAGE_COUNT
+                # optional: assign properties
+                prop_map = message.properties()
+                prop_map.add("temperatureAlert", "true" if temperature > TEMPERATURE_ALERT else "false")
+
+                client.send_event_async(message, send_confirmation_callback, MESSAGE_COUNT)
+                print ( "IoTHubClient.send_event_async accepted message [%d] for transmission to IoT Hub." % MESSAGE_COUNT )
+
+                status = client.get_send_status()
+                print ( "Send status: %s" % status )
+                MESSAGE_COUNT += 1
+            time.sleep(config.MESSAGE_TIMESPAN / 1000.0)
     except IoTHubError as iothub_error:
         print ( "Unexpected error %s from IoTHub" % iothub_error )
         telemetry.send_telemetry_data(parse_iot_hub_name(), EVENT_FAILED, "Unexpected error %s from IoTHub" % iothub_error)
