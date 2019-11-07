@@ -114,8 +114,8 @@ if __name__ == "__main__":
 
     sensor = 0
     pin = 0
-    if len(sys.argv) >= 3 and sys.argv[2] in sensor_args:
-        sensor = sensor_args[sys.argv[2]]
+    if len(sys.argv) >= 3 and sys.argv[1] in sensor_args:
+        sensor = sensor_args[sys.argv[1]]
         pin = sys.argv[2]
     else:
         print('Usage: sudo ./Adafruit_DHT.py [11|22|2302] <GPIO pin number>')
