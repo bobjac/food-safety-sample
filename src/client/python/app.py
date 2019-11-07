@@ -88,6 +88,7 @@ def get_connection_string():
         if len(sys.argv) == 4:
             connection_string = sys.argv[3]
 
+    print('The connection string is ' + connection_string)
     return connection_string
 
 CONNECTION_STRING = get_connection_string()
