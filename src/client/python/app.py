@@ -43,8 +43,6 @@ METHOD_CALLBACKS = 0
 EVENT_SUCCESS = "success"
 EVENT_FAILED = "failed"
 
-MESSAGE_TIMESPAN = get_message_timespan()
-
 # chose HTTP, AMQP or MQTT as transport protocol
 PROTOCOL = IoTHubTransportProvider.MQTT
 
@@ -244,6 +242,8 @@ def get_message_timespan():
     if 'other' in cfg:
         timespan = cfg['other']['messagetimespan']
     return timespan
+
+MESSAGE_TIMESPAN = get_message_timespan()
 
 #def led_blink():
 #    GPIO.output(config.GPIO_PIN_ADDRESS, GPIO.HIGH)
