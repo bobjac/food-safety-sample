@@ -80,7 +80,7 @@ def get_connection_string():
     connection_string = ""
 
     with open("config.yml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+        cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
     
     if 'iothub' in cfg:
         connection_string = cfg['iothub']['connectionstring']
