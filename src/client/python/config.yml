@@ -1,6 +1,9 @@
 iothub:
     connectionstring: REPLACE_WITH_IOTHUB_CONNECTION_STRING
 other:
+    messagetimespan: 2000
+    simulateddate: False
+    
     preprocessing_queue:
         - preprocessing.scale_and_center
         - preprocessing.dot_reduction
