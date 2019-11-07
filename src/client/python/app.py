@@ -58,7 +58,7 @@ def is_correct_connection_string():
         return False
 
 def send_temp_and_humidity(sensor, pin):
-
+    message_timespan = get_message_timespan()
     try:
         client = iothub_client_init()
         
@@ -110,7 +110,7 @@ def send_temp_and_humidity(sensor, pin):
                 status = client.get_send_status()
                 print ( "Send status: %s" % status )
                 MESSAGE_COUNT += 1
-            time.sleep(config.MESSAGE_TIMESPAN / 1000.0)
+            time.sleep(message_timespan / 1000.0)
     except IoTHubError as iothub_error:
         print ( "Unexpected error %s from IoTHub" % iothub_error )
         telemetry.send_telemetry_data(parse_iot_hub_name(), EVENT_FAILED, "Unexpected error %s from IoTHub" % iothub_error)
