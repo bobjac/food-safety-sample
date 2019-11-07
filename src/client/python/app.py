@@ -241,7 +241,7 @@ def get_message_timespan():
     
     if 'other' in cfg:
         timespan = cfg['other']['messagetimespan']
-    return timespan
+    return int(timespan)
 
 MESSAGE_TIMESPAN = get_message_timespan()
 
