@@ -5,3 +5,4 @@ All code in this section came from Microsoft IoT Hub quickstarts found [here](ht
 Original GitHub repositories linked below:
 
 - [.NET core](https://github.com/Azure-Samples/azure-iot-samples-csharp)
+- [Python](https://github.com/Azure-Samples/azure-iot-samples-python)
