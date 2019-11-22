@@ -27,6 +27,8 @@ var (
 func main() {
 	pflag.Parse()
 
+	log.Infof("pulled the following parameters off the command line %s, %s, %s", *subscriptionID, *clientID, *resourceGroup)
+
 	podname := os.Getenv("MY_POD_NAME")
 	podnamespace := os.Getenv("MY_POD_NAMESPACE")
 	podip := os.Getenv("MY_POD_IP")
