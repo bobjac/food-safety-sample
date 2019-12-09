@@ -7,6 +7,9 @@ The repository contains and end-to-end food safety scenario that uses Azure Bloc
 An overall high-level call sequence of the solution is as follows:
 ![](img/foodsafety-callsequence.png)
 
+A view of the overall services that make up the solution architecture are as follows:
+![](img/foodsafety-architecture-diagram.png)
+
 
 # Client Python Dependencies for Raspberry Pi
 The client code makes use of the Adafruit_Python_DHT Python module.  You can find the code repository at https://github.com/adafruit/Adafruit_Python_DHT.
