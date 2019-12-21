@@ -103,4 +103,5 @@ npm install azure-iot-device-mqtt
 ````
 # Azure Blockchain Service
 
+All Quorum smart contracts will be deployed to Azure Blockchain Service.
 
