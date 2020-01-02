@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.Azure.EventHubs;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.Azure.EventHubs;
 
 namespace injest
 {
