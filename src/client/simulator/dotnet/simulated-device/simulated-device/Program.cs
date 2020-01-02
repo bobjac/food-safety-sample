@@ -7,7 +7,7 @@ namespace simulated_device
         // The device connection string to authenticate the device with your IoT hub.
         // Using the Azure CLI:
         // az iot hub device-identity show-connection-string --hub-name {YourIoTHubName} --device-id MyDotnetDevice --output table
-        private readonly static string connectionString = "HostName=bobjacfoodsafety.azure-devices.net;DeviceId=MyDotnetDevice;SharedAccessKey=YJRbHoN4xE12tz7cpNZ3m7FF10LKlGUiVSvCEFA8t9Y=";
+        private readonly static string connectionString = "{Connection String}";
 
         static void Main(string[] args)
         {
