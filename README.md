@@ -101,10 +101,15 @@ sudo apt-get install git
 npm install azure-iot-device
 npm install azure-iot-device-mqtt
 ````
+
 # Azure Blockchain Service
 
 All Quorum smart contracts will be deployed to Azure Blockchain Service. The smart contracts will store a history of the temperature and humidity snapshots from all counterparties, and will use the Azure Blockchain Service Data Manager Gateway to send violation notifications to Event Grid. Subscribers will be able to take appropriate action at the time of violation and all violations will be logged to the ledger for audit purposes.
 
-# Microservices
+# Microservices 
+
+The solution will be build with REST microservices that encapsulate all RPC communication with the Blockchain ledger. This allows external callers to use simple SDKs to make REST calls without bringing any Blockchain code into thier solution. The core microservice will be written in .NET using the Nethereum Nuget package, which handles all of the RPC communication with Blockchain.
+
+
 
 
