@@ -103,5 +103,8 @@ npm install azure-iot-device-mqtt
 ````
 # Azure Blockchain Service
 
-All Quorum smart contracts will be deployed to Azure Blockchain Service.
+All Quorum smart contracts will be deployed to Azure Blockchain Service. The smart contracts will store a history of the temperature and humidity snapshots from all counterparties, and will use the Azure Blockchain Service Data Manager Gateway to send violation notifications to Event Grid. Subscribers will be able to take appropriate action at the time of violation and all violations will be logged to the ledger for audit purposes.
+
+# Microservices
+
 
