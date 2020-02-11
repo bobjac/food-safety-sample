@@ -114,7 +114,7 @@ A second microservice will handle the injestion from the IoT devices through the
 
 # Key Vault
 
-All Blockchain transactions will be signed by private keys stored and managed in Azure Key Vault.
+All Blockchain transactions will be signed by private keys stored and managed in Azure Key Vault. Blockchain keys are typically stored in wallet software, but organizations in consortiums can want a single account (public/private key pair) to represent the organization. Their desire is to store the private key in key vault and take advantage of the HSM capabalities in Azure.
 
 # Azure Kubernetes Service (AKS)
 
