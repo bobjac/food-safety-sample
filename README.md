@@ -108,22 +108,25 @@ All Quorum smart contracts will be deployed to Azure Blockchain Service. The sma
 
 # Microservices 
 
-The solution will be build with REST microservices that encapsulate all RPC communication with the Blockchain ledger. This allows external callers to use simple SDKs to make REST calls without bringing any Blockchain code into thier solution. The core microservice will be written in .NET using the Nethereum Nuget package, which handles all of the RPC communication with Blockchain.
+The solution will be build with REST microservices that encapsulate all communication with the Blockchain ledger. This allows external callers to use simple SDKs to make REST calls without bringing any Blockchain code into thier solution. The core microservice will be written in .NET using the Nethereum Nuget package, which handles all of the RPC communication with Blockchain.
 
 A second microservice will handle the injestion from the IoT devices through the Azure IoT Hub. The rate of message delivery (temperature/humidity) will exceed the rate at which the Blockchain ledger can produce transactions, so a microservice will be used to read from the IoT Hub and batch up writes to the smart contract.
 
 # Key Vault
 
-All Blockchain transactions will be signed by private keys stored and managed in Azure Key Vault. Blockchain keys are typically stored in wallet software, but organizations in consortiums can want a single account (public/private key pair) to represent the organization. Their desire is to store the private key in key vault and take advantage of the HSM capabalities in Azure.
+All Blockchain transactions will be signed by private keys stored and managed in Azure Key Vault. Blockchain keys are typically stored in wallet software, but some consortium members want a single account (public/private key pair) to represent the organization. The HSM capabilities of Azure Key Vault are great for storing these organization's keys as it is backed by an SLA can be guarded by RBAC. All keys required in Blockchain transactions will be stored in Key Vault for this sample.
 
 # Azure Kubernetes Service (AKS)
 
 Azure Blockchain DevKit is a tremendous framework for working with Azure Blockchain Service with serverless technologies. It is overs developers the opportunity to simply leverage things like Logic Apps connectors to abstract away interacting with the Blockchain ledger. However, many organizations have made significant investments in Kubernetes clusters in support of cloud native architectures. This sample shows how you can use cloud native microservices on Kubernetes to abstract away Blockchain.
 
 
-All microservices will be deployed to Azure Kubernetes Service. 
+All microservices will be deployed to Azure Kubernetes Service. The AKS pods will be given managed service identity through the AAD Pod Identity package. This will allow the microservice reposible for writing to the Azure Blockchain Service to retrive the key from the Azure Key Vault without needing any service principal credentials. The only configuration information needed to interact with the needed keys will be the URI of the keys in Key Vault.
 
 # Event Grid 
 
 The Azure Blockchain Service's Data Manager will publish messages to an Azure Event Grid. Will enable subscribers to to respond to events that are triggered from transactions to the Blockchain ledger. This enables integration scenarios while allowing the Blockchain ledger to be the single source of truth. A number of integration services such as Logic Apps, Azure Functions and Power Apps can capture the event and take appropriate action based on the unique requirements of the counterpart member.
 
+# Azure SQL Database
+
+Blockchain ledgers are not designed for querying. Organizations that want to query the data that lives in Blockchain will usually execute queries against an offchain store like a SQL Database. Using the Azure Blockchain Service Data Manager allows events to be captured from Event Grid and written to an external offchain store. This sample includes an Azure SQL Database to store a replica of the data in the Blockchain ledger. Traditional querying and analytics tools can be used to interact with the data in Azure SQL Database.
