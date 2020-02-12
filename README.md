@@ -118,7 +118,10 @@ All Blockchain transactions will be signed by private keys stored and managed in
 
 # Azure Kubernetes Service (AKS)
 
-All microservices will be deployed to Azure Kubernetes Service. This will demonstrate the ability to leverage existing investments in Kubernetes infrastructure. 
+Azure Blockchain DevKit is a tremendous framework for working with Azure Blockchain Service with serverless technologies. It is overs developers the opportunity to simply leverage things like Logic Apps connectors to abstract away interacting with the Blockchain ledger. However, many organizations have made significant investments in Kubernetes clusters in support of cloud native architectures. This sample shows how you can use cloud native microservices on Kubernetes to abstract away Blockchain.
+
+
+All microservices will be deployed to Azure Kubernetes Service. 
 
 # Event Grid 
 
