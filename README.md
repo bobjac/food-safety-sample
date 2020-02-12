@@ -108,7 +108,7 @@ All Quorum smart contracts will be deployed to Azure Blockchain Service. The sma
 
 # Microservices 
 
-The solution will be build with REST microservices that encapsulate all communication with the Blockchain ledger. This allows external callers to use simple SDKs to make REST calls without bringing any Blockchain code into thier solution. The core microservice will be written in .NET using the Nethereum Nuget package, which handles all of the RPC communication with Blockchain.
+The solution will be build with REST microservices that encapsulate all communication with the Blockchain ledger. This allows external callers to use simple SDKs to make REST calls without bringing any Blockchain code into thier solution. The core microservice will be written in .NET using the Nethereum Nuget package, which handles all of the RPC communication with Blockchain. More information on this microservice can be found at https://github.com/bobjac/QuorumAKSWithKeyVault.
 
 A second microservice will handle the injestion from the IoT devices through the Azure IoT Hub. The rate of message delivery (temperature/humidity) will exceed the rate at which the Blockchain ledger can produce transactions, so a microservice will be used to read from the IoT Hub and batch up writes to the smart contract.
 
