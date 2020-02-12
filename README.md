@@ -120,4 +120,7 @@ All Blockchain transactions will be signed by private keys stored and managed in
 
 All microservices will be deployed to Azure Kubernetes Service. This will demonstrate the ability to leverage existing investments in Kubernetes infrastructure. 
 
+# Event Grid 
+
+The Azure Blockchain Service's Data Manager will publish messages to an Azure Event Grid. Will enable subscribers to to respond to events that are triggered from transactions to the Blockchain ledger. This enables integration scenarios while allowing the Blockchain ledger to be the single source of truth. A number of integration services such as Logic Apps, Azure Functions and Power Apps can capture the event and take appropriate action based on the unique requirements of the counterpart member.
 
