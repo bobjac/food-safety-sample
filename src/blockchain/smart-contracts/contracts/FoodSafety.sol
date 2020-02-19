@@ -42,6 +42,8 @@ contract FoodSafety
         if (isValid(r)) {
             records.push(r);
             numRecords++;
+        } else {
+            setInvalid(r);
         }
     }
     function isValid(Record memory r) private returns (bool) {
@@ -52,18 +54,19 @@ contract FoodSafety
         int maxHumidity = 50;
         
         if (r.temperature < minTemp || r.temperature > maxTemp) {
-            State = StateType.NonCompliant;
-            emit StateChanged("HORRIBLE!!!!!!");
             isValid = false;
         }
         
         if (r.humidity < minHumidity || r.humidity > maxHumidity) {
-            State = StateType.NonCompliant;
-            emit StateChanged("HORRIBLE!!!!!!");
             isValid = false;
         }
         
         return isValid;
+    }
+
+    function setInvalid(Record memory r) private {
+        State = StateType.NonCompliant;
+        emit StateChanged("HORRIBLE!!!!!!");
     }
     
     function GetRecordCount() public returns (uint) {
@@ -78,7 +81,7 @@ contract FoodSafety
         Record memory r = records[index];
         return (r.sensorId, r.temperature, r.humidity, r.timestamp);
     }
-    
+
     function GetContractState() public returns (StateType) {
         return State;
     }
