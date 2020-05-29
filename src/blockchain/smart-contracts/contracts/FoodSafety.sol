@@ -31,8 +31,7 @@ contract FoodSafety
         emit StateChanged('Request');
     }
 
-    function SetRecord(string memory sensorId, int256 temperature, int256 humidity, string memory timestamp) public
-    {
+    function SetRecord(string memory sensorId, int256 temperature, int256 humidity, string memory timestamp) public returns (bool) {
         Record memory r;
         r.sensorId = sensorId;
         r.temperature = temperature;
@@ -42,8 +41,10 @@ contract FoodSafety
         if (isValid(r)) {
             records.push(r);
             numRecords++;
+            return (true);
         } else {
             setInvalid(r);
+            return (false);
         }
     }
     function isValid(Record memory r) private returns (bool) {
