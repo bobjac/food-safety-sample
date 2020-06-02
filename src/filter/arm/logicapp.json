@@ -1,0 +1,336 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "azureeventgrid_1_Connection_Name": {
+      "type": "string"
+    },
+    "azureeventgrid_1_Connection_DisplayName": {
+      "type": "string"
+    },
+    "office365_1_Connection_Name": {
+      "type": "string"
+    },
+    "office365_1_Connection_DisplayName": {
+      "type": "string"
+    },
+    "LogicAppLocation": {
+      "type": "string",
+      "minLength": 1,
+      "allowedValues": [
+        "[resourceGroup().location]",
+        "eastasia",
+        "southeastasia",
+        "centralus",
+        "eastus",
+        "eastus2",
+        "westus",
+        "northcentralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "japanwest",
+        "japaneast",
+        "brazilsouth",
+        "australiaeast",
+        "australiasoutheast",
+        "southindia",
+        "centralindia",
+        "westindia",
+        "canadacentral",
+        "canadaeast",
+        "uksouth",
+        "ukwest",
+        "westcentralus",
+        "westus2",
+        "koreacentral",
+        "koreasouth",
+        "francecentral",
+        "francesouth",
+        "uaecentral",
+        "southafricanorth",
+        "southafricawest"
+      ],
+      "defaultValue": "eastus"
+    },
+    "LogicAppName": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "When_a_resource_event_occurs": {
+              "splitOn": "@triggerBody()",
+              "type": "ApiConnectionWebhook",
+              "inputs": {
+                "body": {
+                  "properties": {
+                    "destination": {
+                      "endpointType": "webhook",
+                      "properties": {
+                        "endpointUrl": "@{listCallbackUrl()}"
+                      }
+                    },
+                    "topic": "/subscriptions/3410d148-d67e-4fd5-91eb-08a92fdff175/resourceGroups/blockchain-test/providers/Microsoft.EventGrid/topics/testmem-topic"
+                  }
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureeventgrid']['connectionId']"
+                  }
+                },
+                "path": "/subscriptions/@{encodeURIComponent('3410d148-d67e-4fd5-91eb-08a92fdff175')}/providers/@{encodeURIComponent('Microsoft.EventGrid.Topics')}/resource/eventSubscriptions",
+                "queries": {
+                  "x-ms-api-version": "2017-09-15-preview"
+                }
+              }
+            }
+          },
+          "actions": {
+            "Condition": {
+              "actions": {
+                "For_each": {
+                  "foreach": "@body('Parse_JSON')?['EventValue']",
+                  "actions": {
+                    "Condition_2": {
+                      "actions": {
+                        "Send_an_email_(V2)": {
+                          "runAfter": {},
+                          "type": "ApiConnection",
+                          "inputs": {
+                            "body": {
+                              "Body": "<p>State name: @{items('For_each')?['ParameterName']}<br>\nNew value: @{items('For_each')?['ParameterValue']}</p>",
+                              "Subject": "State changed",
+                              "To": "micya@microsoft.com"
+                            },
+                            "host": {
+                              "connection": {
+                                "name": "@parameters('$connections')['office365']['connectionId']"
+                              }
+                            },
+                            "method": "post",
+                            "path": "/v2/Mail"
+                          }
+                        }
+                      },
+                      "runAfter": {},
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@items('For_each')?['ParameterName']",
+                              "stateData"
+                            ]
+                          },
+                          {
+                            "equals": [
+                              "@items('For_each')?['ParameterValue']",
+                              "HORRIBLE!!!!!!"
+                            ]
+                          }
+                        ]
+                      },
+                      "type": "If"
+                    }
+                  },
+                  "runAfter": {},
+                  "type": "Foreach"
+                }
+              },
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@body('Parse_JSON')?['MessageType']",
+                      "DecodedContractEventsMsg"
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@body('Parse_JSON')?['EventName']",
+                      "StateChanged"
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "Parse_JSON": {
+              "runAfter": {},
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()?['data']",
+                "schema": {
+                  "properties": {
+                    "BatchSize": {
+                      "type": "integer"
+                    },
+                    "BlockHash": {
+                      "type": "string"
+                    },
+                    "BlockNumber": {
+                      "type": "integer"
+                    },
+                    "BlockTimestamp": {
+                      "type": "integer"
+                    },
+                    "Connection": {
+                      "type": "string"
+                    },
+                    "ContractAddress": {
+                      "type": "string"
+                    },
+                    "EventName": {
+                      "type": "string"
+                    },
+                    "EventValue": {
+                      "items": {
+                        "properties": {
+                          "Indexed": {
+                            "type": "boolean"
+                          },
+                          "ParameterName": {
+                            "type": "string"
+                          },
+                          "ParameterType": {
+                            "type": "string"
+                          },
+                          "ParameterValue": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "ParameterName",
+                          "ParameterType",
+                          "ParameterValue",
+                          "Indexed"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "InitMessageId": {
+                      "type": "string"
+                    },
+                    "MessageId": {
+                      "type": "string"
+                    },
+                    "MessageType": {
+                      "type": "string"
+                    },
+                    "RawTopicHex": {
+                      "type": "string"
+                    },
+                    "ScheduleOffsetMillisec": {
+                      "type": "integer"
+                    },
+                    "SequenceNumber": {
+                      "type": "integer"
+                    },
+                    "TransactionHash": {
+                      "type": "string"
+                    },
+                    "WatcherId": {
+                      "type": "string"
+                    },
+                    "_attachments": {
+                      "type": "string"
+                    },
+                    "_etag": {
+                      "type": "string"
+                    },
+                    "_rid": {
+                      "type": "string"
+                    },
+                    "_self": {
+                      "type": "string"
+                    },
+                    "_ts": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azureeventgrid": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', 'eastus', '/managedApis/', 'azureeventgrid')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('azureeventgrid_1_Connection_Name'))]",
+                "connectionName": "[parameters('azureeventgrid_1_Connection_Name')]"
+              },
+              "office365": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', 'eastus', '/managedApis/', 'office365')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('office365_1_Connection_Name'))]",
+                "connectionName": "[parameters('office365_1_Connection_Name')]"
+              }
+            }
+          }
+        }
+      },
+      "name": "[parameters('LogicAppName')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('LogicAppLocation')]",
+      "tags": {
+        "displayName": "LogicApp"
+      },
+      "apiVersion": "2016-06-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', parameters('azureeventgrid_1_Connection_Name'))]",
+        "[resourceId('Microsoft.Web/connections', parameters('office365_1_Connection_Name'))]"
+      ]
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('azureeventgrid_1_Connection_Name')]",
+      "location": "eastus",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', 'eastus', '/managedApis/', 'azureeventgrid')]"
+        },
+        "displayName": "[parameters('azureeventgrid_1_Connection_DisplayName')]"
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('office365_1_Connection_Name')]",
+      "location": "eastus",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', 'eastus', '/managedApis/', 'office365')]"
+        },
+        "displayName": "[parameters('office365_1_Connection_DisplayName')]"
+      }
+    }
+  ],
+  "outputs": {}
+}
