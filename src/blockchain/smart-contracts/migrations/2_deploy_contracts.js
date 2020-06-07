@@ -1,5 +1,5 @@
-var HelloBlockchain = artifacts.require("HelloBlockchain");
-var Arg = "Hello world";
+var FoodSafety = artifacts.require("FoodSafety");
+
 module.exports = deployer => {
-    deployer.deploy(HelloBlockchain, Arg);
+    deployer.deploy(FoodSafety);
 };

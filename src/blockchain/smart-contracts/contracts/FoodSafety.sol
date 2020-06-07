@@ -30,14 +30,12 @@ contract FoodSafety
 
         emit StateChanged('Request');
     }
-
     function SetRecord(string memory sensorId, int256 temperature, int256 humidity, string memory timestamp) public returns (bool) {
         Record memory r;
         r.sensorId = sensorId;
         r.temperature = temperature;
         r.humidity = humidity;
         r.timestamp = timestamp;
-        
         if (isValid(r)) {
             records.push(r);
             numRecords++;
@@ -52,36 +50,28 @@ contract FoodSafety
         int256 maxTemp = 50;
         int minHumidity = -50;
         int maxHumidity = 50;
-        
         if (r.temperature < minTemp || r.temperature > maxTemp) {
             return false;
         }
-        
         if (r.humidity < minHumidity || r.humidity > maxHumidity) {
             return false;
         }
-        
         return true;
     }
-
     function setInvalid(Record memory r) private {
         State = StateType.NonCompliant;
         emit StateChanged("HORRIBLE!!!!!!");
     }
-    
     function GetRecordCount() public view  returns (uint) {
         return numRecords;
     }
-    
     function GetRecordByIndex(uint index) public view returns (string memory, int256, int256, string memory) {
         if (index > numRecords) {
-            // throw an error
+            revert("The index exceeds the number of records");
         }
-        
         Record memory r = records[index];
         return (r.sensorId, r.temperature, r.humidity, r.timestamp);
     }
-
     function GetContractState() public view returns (StateType) {
         return State;
     }
