@@ -14,6 +14,9 @@
     "office365_1_Connection_DisplayName": {
       "type": "string"
     },
+    "resourceGroup": {
+      "type": "string"
+    },
     "LogicAppLocation": {
       "type": "string",
       "minLength": 1,
@@ -85,7 +88,7 @@
                         "endpointUrl": "@{listCallbackUrl()}"
                       }
                     },
-                    "topic": "/subscriptions/3410d148-d67e-4fd5-91eb-08a92fdff175/resourceGroups/blockchain-test/providers/Microsoft.EventGrid/topics/testmem-topic"
+                    "topic": "[concat('/subscriptions/', subscription().id, '/resourceGroups/', 'foodsafetyt20', '/providers/Microsoft.EventGrid/topics/', 'foodsafetyt20')]"
                   }
                 },
                 "host": {
@@ -93,7 +96,7 @@
                     "name": "@parameters('$connections')['azureeventgrid']['connectionId']"
                   }
                 },
-                "path": "/subscriptions/@{encodeURIComponent('3410d148-d67e-4fd5-91eb-08a92fdff175')}/providers/@{encodeURIComponent('Microsoft.EventGrid.Topics')}/resource/eventSubscriptions",
+                "path": "/subscriptions/@{encodeURIComponent('2e467bcc-ec84-4430-a27f-beac4ec94251')}/providers/@{encodeURIComponent('Microsoft.EventGrid.Topics')}/resource/eventSubscriptions",
                 "queries": {
                   "x-ms-api-version": "2017-09-15-preview"
                 }
@@ -115,7 +118,7 @@
                             "body": {
                               "Body": "<p>State name: @{items('For_each')?['ParameterName']}<br>\nNew value: @{items('For_each')?['ParameterValue']}</p>",
                               "Subject": "State changed",
-                              "To": "micya@microsoft.com"
+                              "To": "bobjac@microsoft.com"
                             },
                             "host": {
                               "connection": {
