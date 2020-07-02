@@ -67,7 +67,7 @@ contract FoodSafety
     }
     function GetRecordByIndex(uint index) public view returns (string memory, int256, int256, string memory) {
         if (index > numRecords) {
-            revert("The index exceeds the number of records");
+            revert("Error - the index exceeds the number of records");
         }
         Record memory r = records[index];
         return (r.sensorId, r.temperature, r.humidity, r.timestamp);
