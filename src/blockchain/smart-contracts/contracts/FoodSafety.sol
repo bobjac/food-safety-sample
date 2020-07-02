@@ -47,7 +47,7 @@ contract FoodSafety
     }
     function isValid(Record memory r) private pure returns (bool) {
         int256 minTemp = -30;
-        int256 maxTemp = 30;
+        int256 maxTemp = 32;
         int minHumidity = -50;
         int maxHumidity = 99;
         if (r.temperature < minTemp || r.temperature > maxTemp) {
