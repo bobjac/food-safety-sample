@@ -5,9 +5,17 @@ const path = require('path');
 const EventHubReader = require('./scripts/event-hub-reader.js');
 const fetch = require("node-fetch");
 
-const iotHubConnectionString = process.env.IotHubConnectionString;
-const eventHubConsumerGroup = process.env.EventHubConsumerGroup;
-const apiEndpoint = process.env.ApiEndpoint;
+// HostName=FoodSafetyHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=W3fy/ruVogLuAQPgwZpWfMSCSUHSOUQtHT1umuGPOYM=
+//const iotHubConnectionString = process.env.IotHubConnectionString;
+const iotHubConnectionString = "HostName=FoodSafetyHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=W3fy/ruVogLuAQPgwZpWfMSCSUHSOUQtHT1umuGPOYM=";
+
+// aksconsumer
+//const eventHubConsumerGroup = process.env.EventHubConsumerGroup;
+const eventHubConsumerGroup = "aksconsumer";
+
+// http://52.186.36.71:80/api/QuorumTransactionService
+//const apiEndpoint = process.env.ApiEndpoint;
+const apiEndpoint = "http://52.186.36.71:80/api/QuorumTransactionService";
 
 console.log(`iotHubConnectionString is ${iotHubConnectionString}`);
 console.log(`eventHubConsumerGroup is ${eventHubConsumerGroup}`);
@@ -88,6 +96,7 @@ let sendCounter = 0;
         console.log(`Message from simulator with a value of ${apiPayload}`);
 
         if (sendCounter == 20) { 
+          console.log(`Calling the api with an endpoint of ${apiEndpoint}`);
           postData(apiEndpoint, apiPayload)
                 .then(data => {
                   console.log(data); // JSON data parsed by `response.json()` call
