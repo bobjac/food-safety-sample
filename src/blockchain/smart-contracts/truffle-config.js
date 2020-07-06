@@ -18,6 +18,11 @@ module.exports = {
       gas: 0,
       gasPrice: 0,
       provider: new HDWalletProvider(fs.readFileSync('/Users/bobjacobs/work/customers/Untitled.env', 'utf-8'), "https://bobjacfoodsafetyt20.blockchain.azure.com:3200/zpauIGYHVNni-AxLQC5ypgLs")
+    },
+    abs_bobjacfoodsafety2_bobjacfoodsafety2_bobjacfoodsafety2: {
+      network_id: "*",
+      gasPrice: 0,
+      provider: new HDWalletProvider(fs.readFileSync('/Users/bobjacobs/work/customers/Untitled.env', 'utf-8'), "https://bobjacfoodsafety2.blockchain.azure.com:3200/aVIVZ9SculsRf1qF7Xhz1unj")
     }
   }
 };

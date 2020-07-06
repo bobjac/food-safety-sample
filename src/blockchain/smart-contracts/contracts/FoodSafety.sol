@@ -46,10 +46,10 @@ contract FoodSafety
         }
     }
     function isValid(Record memory r) private pure returns (bool) {
-        int256 minTemp = -50;
-        int256 maxTemp = 50;
+        int256 minTemp = -30;
+        int256 maxTemp = 32;
         int minHumidity = -50;
-        int maxHumidity = 50;
+        int maxHumidity = 99;
         if (r.temperature < minTemp || r.temperature > maxTemp) {
             return false;
         }
@@ -67,7 +67,7 @@ contract FoodSafety
     }
     function GetRecordByIndex(uint index) public view returns (string memory, int256, int256, string memory) {
         if (index > numRecords) {
-            revert("The index exceeds the number of records");
+            revert("Error - the index exceeds the number of records");
         }
         Record memory r = records[index];
         return (r.sensorId, r.temperature, r.humidity, r.timestamp);
